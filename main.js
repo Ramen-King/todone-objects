@@ -8,7 +8,6 @@ For example, isDone[3] would hold the "done-ness" information for todos[3].
 */
 
 let todos = [];
-let isDone = [];
 
 // When the html finishes loading, launch `init`.
 window.onload = init;
@@ -41,9 +40,8 @@ function addTodo(event) {
 
     const i = todos.length;
     // Put the todo and its "done-ness" in their respective arrays.
-    todos.push(todoText);
-    isDone.push(false);
-
+    todos.push({todo: todoText, isDone: false});
+    
     
 
     // Create a new html element and put our new todo's text in there.
@@ -68,7 +66,6 @@ function clearAllTodos(event) {
     
     // Remove all todos from BOTH arrays.
     todos.splice(0);
-    isDone.splice(0);
     
     // Remove all todos from the html.
     // You'll have to write that function too, but we'll call it here:
@@ -89,12 +86,14 @@ function clearDoneTodos(event) {
         One way to do this is to build up a new array. Give that a try first!
 
     */
+       let remainingTodos = []; 
+       for(let i = 0; i < todos.length; i++){
+           if(!todos[i].isDone){
+               remainingTodos.push(todos[i]);
+           }
+       }
+       todos = remainingTodos
 
-    while (isDone.includes(true)) {
-        const i = isDone.indexOf(true);
-        todos.splice(i, 1);
-        isDone.splice(i, 1);
-    }
 
 
     /*
@@ -171,14 +170,16 @@ function toggleDone(event) {
     // const i = todos.indexOf(clickedLi.innerText);
     
     // Toggle the "done-ness" of the same todo, using the isDone array.
-    isDone[i] = !isDone[i];
+    todos[i] = !todos[i];
 
     // *IF* it's done, apply strikethrough. Otherwise, take that
     // strikethrough away!
-    if(isDone[i]) {
+    if(!todos[i].isDone) {
         clickedLi.style.textDecoration = 'line-through';
+        todos.splice(i, 1, {todo: clickedLi.innerText, isDone: true})
     } else {
         clickedLi.style.textDecoration = '';
+        
     }
 
 
